@@ -1,4 +1,4 @@
-function TodoFilters({ filter, onFilterChange, activeCount }) {
+function TodoFilters({ filter, onFilterChange, activeCount, isDark, onToggleTheme }) {
   return (
     <div style={{
       display: 'flex',
@@ -6,10 +6,12 @@ function TodoFilters({ filter, onFilterChange, activeCount }) {
       alignItems: 'center',
       marginBottom: '20px',
       paddingBottom: '10px',
-      borderBottom: '2px solid #eee'
+      borderBottom: `2px solid ${isDark ? '#444' : '#eee'}`
     }}>
-      <span>Осталось задач: {activeCount}</span>
-      <div>
+      <span style={{ color: isDark ? '#e0e0e0' : '#333' }}>
+        Осталось задач: {activeCount}
+      </span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         {['all', 'active', 'completed'].map((filterType) => (
           <button
             key={filterType}
@@ -17,8 +19,8 @@ function TodoFilters({ filter, onFilterChange, activeCount }) {
             style={{
               margin: '0 5px',
               padding: '5px 10px',
-              background: filter === filterType ? '#007bff' : '#f0f0f0',
-              color: filter === filterType ? 'white' : '#333',
+              background: filter === filterType ? '#007bff' : (isDark ? '#444' : '#f0f0f0'),
+              color: filter === filterType ? 'white' : (isDark ? '#e0e0e0' : '#333'),
               border: 'none',
               borderRadius: '4px',
               cursor: 'pointer'
@@ -28,6 +30,21 @@ function TodoFilters({ filter, onFilterChange, activeCount }) {
               filterType === 'active' ? 'Активные' : 'Выполненные'}
           </button>
         ))}
+        <button
+          onClick={onToggleTheme}
+          style={{
+            padding: '5px 10px',
+            background: isDark ? '#ff9800' : '#333',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            marginLeft: '10px'
+          }}
+          title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+        >
+          {isDark ? '☀️' : '🌙'}
+        </button>
       </div>
     </div>
   );

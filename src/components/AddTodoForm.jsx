@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function AddTodoForm({ onAdd }) {
+function AddTodoForm({ onAdd, isDark }) {
   const [text, setText] = useState('');
 
   const handleSubmit = (e) => {
@@ -23,7 +23,9 @@ function AddTodoForm({ onAdd }) {
           width: '300px',
           marginRight: '10px',
           borderRadius: '4px',
-          border: '1px solid #ddd'
+          border: `1px solid ${isDark ? '#555' : '#ddd'}`,
+          backgroundColor: isDark ? '#333' : '#fff',
+          color: isDark ? '#fff' : '#333'
         }}
       />
       <button

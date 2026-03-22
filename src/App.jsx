@@ -14,10 +14,26 @@ function App() {
   // Состояние для текущего фильтра
   const [filter, setFilter] = useState('all');
 
+  // Состояние для темы
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('isDark');
+    return saved ? JSON.parse(saved) : false;
+  });
+
   // Сохраняем задачи в localStorage при каждом изменении
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
+
+  // Сохраняем тему в localStorage
+  useEffect(() => {
+    localStorage.setItem('isDark', JSON.stringify(isDark));
+  }, [isDark]);
+
+  // Переключение темы
+  const toggleTheme = () => {
+    setIsDark(!isDark);
+  };
 
   // Добавление новой задачи
   const addTodo = (text) => {
@@ -41,6 +57,13 @@ function App() {
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
+  // Редактирование задачи
+  const editTodo = (id, newText) => {
+    setTodos(todos.map(todo =>
+      todo.id === id ? { ...todo, text: newText } : todo
+    ));
+  };
+
   // Фильтрация задач
   const filteredTodos = todos.filter(todo => {
     if (filter === 'active') return !todo.completed;
@@ -56,17 +79,22 @@ function App() {
       maxWidth: '600px',
       margin: '0 auto',
       padding: '20px',
-      fontFamily: 'Arial, sans-serif'
+      fontFamily: 'Arial, sans-serif',
+      minHeight: '100vh',
+      backgroundColor: isDark ? '#1a1a1a' : '#fafafa',
+      color: isDark ? '#e0e0e0' : '#333'
     }}>
-      <h1 style={{ textAlign: 'center', color: '#333' }}>Менеджер задач</h1>
-      <AddTodoForm onAdd={addTodo} />
+      <h1 style={{ textAlign: 'center', color: isDark ? '#e0e0e0' : '#333' }}>Менеджер задач</h1>
+      <AddTodoForm onAdd={addTodo} isDark={isDark} />
       <TodoFilters
         filter={filter}
         onFilterChange={setFilter}
         activeCount={activeCount}
+        isDark={isDark}
+        onToggleTheme={toggleTheme}
       />
       {filteredTodos.length === 0 ? (
-        <p style={{ textAlign: 'center', color: '#999' }}>
+        <p style={{ textAlign: 'center', color: isDark ? '#888' : '#999' }}>
           {filter === 'all' ? 'Задач пока нет' :
             filter === 'active' ? 'Нет активных задач' : 'Нет выполненных задач'}
         </p>
@@ -78,6 +106,8 @@ function App() {
               task={todo}
               onToggle={toggleTodo}
               onDelete={deleteTodo}
+              onEdit={editTodo}
+              isDark={isDark}
             />
           ))}
         </ul>
