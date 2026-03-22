@@ -25,9 +25,11 @@ function App() {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  // Сохраняем тему в localStorage
+  // Сохраняем тему в localStorage и применяем к body
   useEffect(() => {
     localStorage.setItem('isDark', JSON.stringify(isDark));
+    document.body.style.backgroundColor = isDark ? '#121212' : '#f5f5f5';
+    document.body.style.color = isDark ? '#e0e0e0' : '#333';
   }, [isDark]);
 
   // Переключение темы
@@ -76,30 +78,66 @@ function App() {
 
   return (
     <div style={{
-      maxWidth: '600px',
-      margin: '0 auto',
-      padding: '20px',
-      fontFamily: 'Arial, sans-serif',
-      minHeight: '100vh',
-      backgroundColor: isDark ? '#1a1a1a' : '#fafafa',
-      color: isDark ? '#e0e0e0' : '#333'
+      maxWidth: '500px',
+      margin: '60px auto',
+      padding: '32px 24px',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      backgroundColor: isDark ? '#1e1e1e' : '#ffffff',
+      borderRadius: '16px',
+      boxShadow: isDark 
+        ? '0 4px 24px rgba(0, 0, 0, 0.4)' 
+        : '0 2px 16px rgba(0, 0, 0, 0.08)'
     }}>
-      <h1 style={{ textAlign: 'center', color: isDark ? '#e0e0e0' : '#333' }}>Менеджер задач</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+        <h1 style={{ 
+          margin: 0, 
+          fontSize: '28px', 
+          fontWeight: '600',
+          color: isDark ? '#fff' : '#1a1a1a' 
+        }}>Tasks</h1>
+        <button
+          onClick={toggleTheme}
+          style={{
+            width: '36px',
+            height: '36px',
+            borderRadius: '50%',
+            background: isDark ? '#333' : '#f0f0f0',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '18px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+          title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {isDark ? '☀️' : '🌙'}
+        </button>
+      </div>
+      
       <AddTodoForm onAdd={addTodo} isDark={isDark} />
+      
       <TodoFilters
         filter={filter}
         onFilterChange={setFilter}
         activeCount={activeCount}
         isDark={isDark}
         onToggleTheme={toggleTheme}
+        onToggleThemeVisible={false}
       />
+      
       {filteredTodos.length === 0 ? (
-        <p style={{ textAlign: 'center', color: isDark ? '#888' : '#999' }}>
-          {filter === 'all' ? 'Задач пока нет' :
-            filter === 'active' ? 'Нет активных задач' : 'Нет выполненных задач'}
+        <p style={{ 
+          textAlign: 'center', 
+          color: isDark ? '#666' : '#999',
+          padding: '32px 0',
+          fontSize: '14px'
+        }}>
+          {filter === 'all' ? 'No tasks yet' :
+            filter === 'active' ? 'No active tasks' : 'No completed tasks'}
         </p>
       ) : (
-        <ul style={{ listStyle: 'none', padding: 0 }}>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
           {filteredTodos.map(todo => (
             <TodoItem
               key={todo.id}
@@ -112,21 +150,25 @@ function App() {
           ))}
         </ul>
       )}
+      
       {todos.length > 0 && (
         <button
           onClick={() => setTodos([])}
           style={{
-            marginTop: '20px',
-            padding: '8px 16px',
-            background: '#dc3545',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
+            marginTop: '24px',
+            padding: '10px 16px',
+            background: 'transparent',
+            color: isDark ? '#ff6b6b' : '#e74c3c',
+            border: `1px solid ${isDark ? '#ff6b6b' : '#e74c3c'}`,
+            borderRadius: '8px',
             cursor: 'pointer',
-            width: '100%'
+            fontSize: '13px',
+            fontWeight: '500',
+            width: '100%',
+            transition: 'all 0.2s ease'
           }}
         >
-          Очистить всё
+          Clear all
         </button>
       )}
     </div>

@@ -29,16 +29,20 @@ function TodoItem({ task, onToggle, onDelete, onEdit, isDark }) {
     <li style={{
       display: 'flex',
       alignItems: 'center',
-      gap: '10px',
-      padding: '8px',
-      borderBottom: `1px solid ${isDark ? '#444' : '#eee'}`,
-      backgroundColor: isDark ? '#2a2a2a' : 'transparent'
+      gap: '12px',
+      padding: '12px 0',
+      borderBottom: `1px solid ${isDark ? '#2a2a2a' : '#f0f0f0'}`
     }}>
       <input
         type="checkbox"
         checked={task.completed}
         onChange={() => onToggle(task.id)}
-        style={{ cursor: 'pointer' }}
+        style={{ 
+          width: '20px', 
+          height: '20px',
+          cursor: 'pointer',
+          accentColor: '#333'
+        }}
       />
       {isEditing ? (
         <input
@@ -50,11 +54,13 @@ function TodoItem({ task, onToggle, onDelete, onEdit, isDark }) {
           autoFocus
           style={{
             flex: 1,
-            padding: '4px 8px',
-            borderRadius: '4px',
-            border: '1px solid #007bff',
-            backgroundColor: isDark ? '#333' : '#fff',
-            color: isDark ? '#fff' : '#333'
+            padding: '8px 12px',
+            fontSize: '15px',
+            borderRadius: '6px',
+            border: '1px solid #333',
+            backgroundColor: isDark ? '#252525' : '#fff',
+            color: isDark ? '#e0e0e0' : '#333',
+            outline: 'none'
           }}
         />
       ) : (
@@ -62,11 +68,13 @@ function TodoItem({ task, onToggle, onDelete, onEdit, isDark }) {
           onDoubleClick={handleDoubleClick}
           style={{
             flex: 1,
+            fontSize: '15px',
             textDecoration: task.completed ? 'line-through' : 'none',
-            color: task.completed ? '#999' : (isDark ? '#e0e0e0' : '#333'),
-            cursor: 'pointer'
+            color: task.completed 
+              ? (isDark ? '#555' : '#aaa') 
+              : (isDark ? '#e0e0e0' : '#333'),
+            cursor: 'text'
           }}
-          title="Double-click to edit"
         >
           {task.text}
         </span>
@@ -74,15 +82,18 @@ function TodoItem({ task, onToggle, onDelete, onEdit, isDark }) {
       <button
         onClick={() => onDelete(task.id)}
         style={{
-          background: '#ff4444',
-          color: 'white',
+          background: 'transparent',
+          color: isDark ? '#666' : '#ccc',
           border: 'none',
-          borderRadius: '4px',
+          cursor: 'pointer',
+          fontSize: '16px',
           padding: '4px 8px',
-          cursor: 'pointer'
+          borderRadius: '4px',
+          transition: 'all 0.15s ease'
         }}
+        title="Delete"
       >
-        Удалить
+        ×
       </button>
     </li>
   );
